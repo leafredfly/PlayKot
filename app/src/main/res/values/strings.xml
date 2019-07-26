@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">kot</string>
+
+    <!-- error -->
+    <string name="error_timeout">网络超时</string>
+    <string name="error_network">网络错误, 请检查你的网络</string>
+    <string name="error_json_syntax">解析错误</string>
+    <string name="error_unknown">系统繁忙，请稍后再试</string>
 </resources>
