@@ -38,4 +38,5 @@
     <string name="network_request_failed">网络连接失败</string>
     <string name="register_ing">正在注册中, 请稍候&#8230;</string>
     <string name="register_success_tip">注册成功</string>
+    <string name="skip">跳过</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -38,6 +39,8 @@ class LoginActivity : BaseActivity(), LoginContract.View {
     }
 
     override fun initView() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         mUsernameInputLayout = findViewById(R.id.input_layout_username)
         mPasswordInputLayout = findViewById(R.id.input_layout_password)
         mEtUsername = findViewById(R.id.edt_username)
@@ -82,6 +85,13 @@ class LoginActivity : BaseActivity(), LoginContract.View {
             mIsLoginMode = !mIsLoginMode
             setLoginMode(mIsLoginMode)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
