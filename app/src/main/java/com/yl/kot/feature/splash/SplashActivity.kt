@@ -1,11 +1,10 @@
 package com.yl.kot.feature.splash
 
-import android.content.Intent
 import android.os.Handler
 import android.widget.TextView
+import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
-import com.yl.kot.feature.home.MainActivity
 
 /**
  * Created on 2019/7/27.
@@ -14,6 +13,7 @@ import com.yl.kot.feature.home.MainActivity
  * @version 1.0
  */
 class SplashActivity : BaseActivity() {
+
     private lateinit var mTvSkip: TextView
 
     private val mHandler: Handler by lazy {
@@ -49,7 +49,7 @@ class SplashActivity : BaseActivity() {
      */
     private fun jump2MainView() {
         mHandler.removeCallbacks(mRunnable)
-        startActivity(Intent(this, MainActivity::class.java))
+        Page.toHome()
         finish()
     }
 

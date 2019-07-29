@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.feature.login.LoginActivity
 import com.yl.kot.utils.SingleToast
 
-class MainActivity : AppCompatActivity(), HomeContract.View {
+class HomeActivity : AppCompatActivity(), HomeContract.View {
     private val mHomePresenter: HomeContract.Presenter by lazy {
         HomePresenter(this)
     }
@@ -24,10 +25,7 @@ class MainActivity : AppCompatActivity(), HomeContract.View {
         mBtnJumpLogin = findViewById(R.id.btn_jump_login)
 
         mBtnJumpLogin.setOnClickListener {
-            startActivityForResult(
-                Intent(this, LoginActivity::class.java),
-                REQUEST_CODE_LOGIN
-            )
+            Page.toLogin()
         }
 
         mHomePresenter.getBanner()

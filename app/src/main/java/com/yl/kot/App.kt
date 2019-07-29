@@ -11,6 +11,7 @@ import com.yl.kot.base.IWindowLifecycle
  * Desc:
  */
 class App : Application(), Application.ActivityLifecycleCallbacks {
+
     companion object {
         private lateinit var INSTANCE: App
 
@@ -18,8 +19,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     }
 
     private val mActivityStack: MutableList<Activity> = mutableListOf()
-
-    internal var mTopActivity: Activity? = null
+    private var mActivityCount = 0
 
     override fun onCreate() {
         super.onCreate()
@@ -34,24 +34,20 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
 
     override fun onActivityStarted(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowStarted")
+        mActivityCount++
     }
 
     override fun onActivityResumed(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowResumed")
-        //设置栈顶Activity
-        mTopActivity = activity
     }
 
     override fun onActivityPaused(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowPaused")
-        //如果暂停的是栈顶Activity, 则将栈顶Activity置空
-        if (activity == mTopActivity) {
-            mTopActivity = null
-        }
     }
 
     override fun onActivityStopped(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowStopped")
+        mActivityCount--
     }
 
     override fun onActivityDestroyed(activity: Activity) {
@@ -62,6 +58,13 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
 
     }
+
+    /**
+     * 获取栈顶Activity
+     */
+    fun topActivity(): Activity = mActivityStack[0]
+
+    fun isForeground(): Boolean = mActivityCount > 0
 
     private fun activityLifecycleInjectIntoField(activity: Activity, methodName: String) {
         try {
