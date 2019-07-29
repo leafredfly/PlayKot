@@ -1,7 +1,8 @@
-package com.yl.kot.data.remote
+package com.yl.kot.data
 
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.entity.User
+import com.yl.kot.data.remote.ApiClient
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

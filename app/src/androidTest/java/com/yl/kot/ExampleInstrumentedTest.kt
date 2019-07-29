@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.yl.kot.data.entity.User
-import com.yl.kot.data.remote.DataManager
+import com.yl.kot.data.DataManager
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith

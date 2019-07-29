@@ -3,7 +3,7 @@ package com.yl.kot.feature.login
 import com.yl.kot.R
 import com.yl.kot.base.BasePresenter
 import com.yl.kot.data.entity.User
-import com.yl.kot.data.remote.DataManager
+import com.yl.kot.data.DataManager
 import com.yl.kot.data.remote.RemoteDataObserver
 
 /**

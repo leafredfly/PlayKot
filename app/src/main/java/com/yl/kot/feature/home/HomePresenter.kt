@@ -2,7 +2,7 @@ package com.yl.kot.feature.home
 
 import com.yl.kot.base.BasePresenter
 import com.yl.kot.data.entity.Banner
-import com.yl.kot.data.remote.DataManager
+import com.yl.kot.data.DataManager
 import com.yl.kot.data.remote.RemoteDataObserver
 
 /**
