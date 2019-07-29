@@ -48,4 +48,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    // https://github.com/scwang90/SmartRefreshLayout
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-15'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-15'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }

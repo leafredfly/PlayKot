@@ -6,6 +6,7 @@
     <string name="error_network">网络错误, 请检查你的网络</string>
     <string name="error_json_syntax">解析错误</string>
     <string name="error_unknown">系统繁忙，请稍后再试</string>
+    <string name="error_bad_link">链接已损坏</string>
 
     <!-- error not login -->
     <string name="error_not_login">您还没登录呢，登录体验更多功能哦</string>
@@ -39,4 +40,7 @@
     <string name="register_ing">正在注册中, 请稍候&#8230;</string>
     <string name="register_success_tip">注册成功</string>
     <string name="skip">跳过</string>
+
+    <!-- Home -->
+    <string name="home_title">首页</string>
 </resources>

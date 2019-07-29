@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.base.BaseRecyclerAdapter
 import com.yl.kot.base.BaseViewHolder
@@ -30,6 +31,9 @@ class BannerAdapter : BaseRecyclerAdapter<BannerAdapter.BannerViewHolder, Banner
 
     override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
         holder.onDataBinding(mData[position % mData.size])
+        holder.itemView.setOnClickListener {
+            holder.onHolderClick(mData[position])
+        }
     }
 
     inner class BannerViewHolder(itemView: View) : BaseViewHolder<Banner>(itemView) {
@@ -42,6 +46,10 @@ class BannerAdapter : BaseRecyclerAdapter<BannerAdapter.BannerViewHolder, Banner
 
         override fun onDataBinding(data: Banner) {
             Glide.with(ivPicture).load(data.imagePath).into(ivPicture)
+        }
+
+        override fun onHolderClick(data: Banner) {
+            Page.toDefaultBrowser(data.url)
         }
     }
 }

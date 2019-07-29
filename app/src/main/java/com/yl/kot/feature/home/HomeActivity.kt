@@ -1,55 +1,66 @@
 package com.yl.kot.feature.home
 
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
-import com.yl.kot.Page
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.yl.kot.R
+import com.yl.kot.base.BaseActivity
+import com.yl.kot.data.entity.Article
 import com.yl.kot.data.entity.Banner
-import com.yl.kot.feature.login.LoginActivity
-import com.yl.kot.utils.SingleToast
+import com.yl.kot.view.banner.BannerView
 
-class HomeActivity : AppCompatActivity(), HomeContract.View {
+class HomeActivity : BaseActivity(), HomeContract.View {
+
+    private lateinit var refreshLayout: SmartRefreshLayout
+    private lateinit var bannerHome: BannerView
+    private lateinit var rvArticleList: RecyclerView
+
     private val mHomePresenter: HomeContract.Presenter by lazy {
         HomePresenter(this)
     }
+    private val mArticleAdapter: ArticleAdapter by lazy {
+        ArticleAdapter()
+    }
+    private var mPage = 0
 
-    private lateinit var mBtnJumpLogin: Button
+    override fun getLayoutId(): Int = R.layout.activity_home
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initView() {
+        refreshLayout = findViewById(R.id.refresh_home)
+        bannerHome = findViewById(R.id.banner_home)
+        rvArticleList = findViewById(R.id.rv_home_article_list)
 
-        mBtnJumpLogin = findViewById(R.id.btn_jump_login)
+        val llm = LinearLayoutManager(this)
+        llm.orientation = RecyclerView.VERTICAL
+        rvArticleList.layoutManager = llm
+        rvArticleList.adapter = mArticleAdapter
 
-        mBtnJumpLogin.setOnClickListener {
-            Page.toLogin()
+        refreshLayout.setOnRefreshListener {
+            mPage = 0
+            mHomePresenter.getArticle(mPage)
+            mHomePresenter.getBanner()
+        }
+        refreshLayout.setOnLoadMoreListener {
+            mPage++
+            mHomePresenter.getArticle(mPage)
         }
 
         mHomePresenter.getBanner()
+        mHomePresenter.getArticle(0)
     }
 
     override fun showBanner(bannerList: List<Banner>) {
-
+        bannerHome.setBanner(bannerList)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_LOGIN) {
-            if (resultCode != RESULT_OK) return
-            val loginResult = LoginActivity.getLoginResult(data)
-            if (loginResult.isLoginSuccess) {
-                mBtnJumpLogin.visibility = View.GONE
-                SingleToast.showToast("欢迎你，" + loginResult.user!!.nickname)
-            } else {
-                mBtnJumpLogin.visibility = View.VISIBLE
-            }
+    override fun showArticle(articleList: List<Article>) {
+        if (mPage == 0) {
+            refreshLayout.finishRefresh()
+            mArticleAdapter.refresh(articleList)
+        } else {
+            refreshLayout.finishLoadMore()
+            mArticleAdapter.loadMore(articleList)
         }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_LOGIN = 0x01
+        if (articleList.size < 20) refreshLayout.setNoMoreData(true)
     }
 }

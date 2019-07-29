@@ -15,6 +15,9 @@ abstract class BaseRecyclerAdapter<VH : BaseViewHolder<T>, T> : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.onDataBinding(mData[position])
+        holder.itemView.setOnClickListener {
+            holder.onHolderClick(mData[position])
+        }
     }
 
     fun refresh(dataList: List<T>) {

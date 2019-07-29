@@ -1,5 +1,6 @@
 package com.yl.kot.data
 
+import com.yl.kot.data.entity.ArticleList
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.entity.User
 import com.yl.kot.data.remote.ApiClient
@@ -14,6 +15,9 @@ import io.reactivex.schedulers.Schedulers
  */
 
 object DataManager {
+    /**
+     * 获取首页Banner
+     */
     fun getBanner(): Observable<List<Banner>> {
         return ApiClient.getApiService()
             .getBanner()
@@ -54,6 +58,16 @@ object DataManager {
     fun logout(): Observable<Any> {
         return ApiClient.getApiService()
             .logout()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * 获取首页文章列表
+     */
+    fun getHomeArticle(page: Int): Observable<ArticleList> {
+        return ApiClient.getApiService()
+            .getHomeArticle(page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

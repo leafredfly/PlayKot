@@ -17,4 +17,6 @@ abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemV
     abstract fun onViewBinding(itemView: View)
 
     abstract fun onDataBinding(data: T)
+
+    open fun onHolderClick(data: T) {}
 }

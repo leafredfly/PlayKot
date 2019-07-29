@@ -1,12 +1,10 @@
 package com.yl.kot.data.remote
 
+import com.yl.kot.data.entity.ArticleList
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.entity.User
 import io.reactivex.Observable
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * Author: Want-Sleep
@@ -27,7 +25,7 @@ interface ApiService {
      * @param password 密码
      */
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("/user/login")
     fun login(
         @Field("username") username: String,
         @Field("password") password: String
@@ -41,7 +39,7 @@ interface ApiService {
      * @param rePassword 密码重复确认
      */
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("/user/login")
     fun register(
         @Field("username") username: String,
         @Field("password") password: String,
@@ -53,4 +51,12 @@ interface ApiService {
      */
     @POST("user/logout/json")
     fun logout(): Observable<Any>
+
+    /**
+     * 获取首页文章列表
+     *
+     * @param page page start from 0
+     */
+    @GET("/article/list/{page}/json")
+    fun getHomeArticle(@Path("page") page: Int): Observable<ArticleList>
 }
