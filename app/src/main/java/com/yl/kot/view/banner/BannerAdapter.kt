@@ -32,7 +32,7 @@ class BannerAdapter : BaseRecyclerAdapter<BannerAdapter.BannerViewHolder, Banner
     override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
         holder.onDataBinding(mData[position % mData.size])
         holder.itemView.setOnClickListener {
-            holder.onHolderClick(mData[position])
+            holder.onHolderClick(mData[position % mData.size])
         }
     }
 
