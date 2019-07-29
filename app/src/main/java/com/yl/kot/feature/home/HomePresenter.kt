@@ -1,6 +1,5 @@
 package com.yl.kot.feature.home
 
-import android.util.Log
 import com.yl.kot.base.BasePresenter
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.remote.DataManager
@@ -18,7 +17,7 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeContract.View>(
         DataManager.getBanner()
             .subscribe(object : RemoteDataObserver<List<Banner>>(this) {
                 override fun onNext(t: List<Banner>) {
-                    Log.d("Debug", "" + t.size)
+                    mView?.showBanner(t)
                 }
             })
     }
