@@ -19,6 +19,8 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
 
     private val mActivityStack: MutableList<Activity> = mutableListOf()
 
+    internal var mTopActivity: Activity? = null
+
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
@@ -36,10 +38,16 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
 
     override fun onActivityResumed(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowResumed")
+        //设置栈顶Activity
+        mTopActivity = activity
     }
 
     override fun onActivityPaused(activity: Activity) {
         activityLifecycleInjectIntoField(activity, "onWindowPaused")
+        //如果暂停的是栈顶Activity, 则将栈顶Activity置空
+        if (activity == mTopActivity) {
+            mTopActivity = null
+        }
     }
 
     override fun onActivityStopped(activity: Activity) {

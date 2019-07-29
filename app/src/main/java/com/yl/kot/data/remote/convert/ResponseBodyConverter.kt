@@ -14,19 +14,20 @@ import java.lang.reflect.Type
  * Date: 2019/07/25
  * Desc:
  */
-internal class ResponseBodyConverter<T>(private val gson: Gson, private val type: Type) : Converter<ResponseBody, T> {
+internal class ResponseBodyConverter<T>(private val gson: Gson, private val type: Type) :
+    Converter<ResponseBody, T> {
 
     override fun convert(value: ResponseBody): T {
         val response = value.string()
         return try {
             val baseBean = gson.fromJson(response, BaseBean::class.java)
-            if (baseBean.code != 0) {
+            if (baseBean.code != ApiException.CODE_SUCCESS) {
                 throw ApiException(baseBean.code, baseBean.message)
             }
             gson.fromJson(baseBean.data, type)
         } catch (e: JsonSyntaxException) {
             val baseArrayBean = gson.fromJson(response, BaseArrayBean::class.java)
-            if (baseArrayBean.code != 0) {
+            if (baseArrayBean.code != ApiException.CODE_SUCCESS) {
                 throw ApiException(baseArrayBean.code, baseArrayBean.message)
             }
             gson.fromJson(baseArrayBean.data, type)

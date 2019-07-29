@@ -1,9 +1,14 @@
 package com.yl.kot.data.remote
 
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import com.google.gson.JsonSyntaxException
+import com.yl.kot.App
 import com.yl.kot.R
 import com.yl.kot.base.IBasePresenter
 import com.yl.kot.base.IBaseView
+import com.yl.kot.feature.login.LoginActivity
 import com.yl.kot.utils.SingleToast
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -50,5 +55,22 @@ open class RemoteDataObserver<T>(private val basePresenter: IBasePresenter<*>) :
 
     private fun handleApiError(apiException: ApiException) {
         SingleToast.showToast(apiException.errorMsg)
+
+        if (apiException.errorCode == ApiException.CODE_NO_LOGIN) {
+            val activity: Activity? = App.getInstance().mTopActivity
+            if (activity != null && activity.javaClass != LoginActivity::class.java) {
+                AlertDialog.Builder(activity)
+                    .setTitle(null)
+                    .setMessage(R.string.error_not_login)
+                    .setPositiveButton(R.string.login_now) { _, _ ->
+                        activity.startActivityForResult(
+                            Intent(activity, LoginActivity::class.java),
+                            LoginActivity.REQUEST_CODE_LOGIN
+                        )
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            }
+        }
     }
 }

@@ -7,4 +7,10 @@ import java.io.IOException
  * Date: 2018/08/14
  * Desc:l
  */
-class ApiException constructor(val errorCode: Int, val errorMsg: String) : IOException(errorMsg)
+class ApiException constructor(val errorCode: Int, val errorMsg: String) : IOException(errorMsg) {
+    companion object {
+        const val CODE_SUCCESS = 0
+        const val CODE_OTHER = -1
+        const val CODE_NO_LOGIN = -1001
+    }
+}
