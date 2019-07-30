@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ArticleList(
     val curPage: Int,
-    @SerializedName("datas") val articleList: List<Article>,
+    @SerializedName("datas") val articleList: MutableList<Article>,
     val pageCount: Int,
     val size: Int,
     val total: Int

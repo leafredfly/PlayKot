@@ -43,4 +43,5 @@
 
     <!-- Home -->
     <string name="home_title">首页</string>
+    <string name="home_top_article_tag">【置顶】%s</string>
 </resources>

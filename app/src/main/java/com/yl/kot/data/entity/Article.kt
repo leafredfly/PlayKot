@@ -9,10 +9,12 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class Article(
-    val author: String,
-    val niceDate: String,
-    val link: String,
-    val title: String,
-    @SerializedName("tags") val tagList: List<ArticleTag>,
-    val zan: Int
+        val id: Int,
+        val author: String,
+        val niceDate: String,
+        val link: String,
+        val title: String,
+        @SerializedName("tags") val tagList: List<ArticleTag>,
+        val zan: Int,
+        var top: Boolean = false
 )

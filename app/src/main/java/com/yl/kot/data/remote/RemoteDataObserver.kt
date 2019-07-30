@@ -31,7 +31,7 @@ open class RemoteDataObserver<T>(private val basePresenter: IBasePresenter<*>) :
         basePresenter.addDisposable(disposable)
     }
 
-    override fun onNext(t: T) {}
+    override fun onNext(response: T) {}
 
     override fun onError(throwable: Throwable) {
         handleError(throwable)

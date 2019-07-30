@@ -36,8 +36,8 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
 
         DataManager.login(username!!, password!!)
             .subscribe(object : RemoteDataObserver<User>(this) {
-                override fun onNext(t: User) {
-                    mView?.showLoginResult(t)
+                override fun onNext(response: User) {
+                    mView?.showLoginResult(response)
                 }
 
                 override fun onError(throwable: Throwable) {
@@ -75,8 +75,8 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
 
         DataManager.register(username!!, password!!, rePassword!!)
             .subscribe(object : RemoteDataObserver<User>(this) {
-                override fun onNext(t: User) {
-                    mView?.showRegisterResult(t)
+                override fun onNext(response: User) {
+                    mView?.showRegisterResult(response)
                 }
 
                 override fun onError(throwable: Throwable) {

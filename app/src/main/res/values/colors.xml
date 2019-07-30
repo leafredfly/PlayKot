@@ -8,6 +8,7 @@
     <!-- text -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
+    <color name="text_white">#FFFFFF</color>
 
     <!-- divider -->
     <color name="divider">#BDBDBD</color>

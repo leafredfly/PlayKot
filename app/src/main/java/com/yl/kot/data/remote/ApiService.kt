@@ -1,5 +1,6 @@
 package com.yl.kot.data.remote
 
+import com.yl.kot.data.entity.Article
 import com.yl.kot.data.entity.ArticleList
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.entity.User
@@ -59,4 +60,11 @@ interface ApiService {
      */
     @GET("/article/list/{page}/json")
     fun getHomeArticle(@Path("page") page: Int): Observable<ArticleList>
+
+    /**
+     * 获取首页置顶文章列表
+     *
+     */
+    @GET("/article/top/json")
+    fun getHomeTopArticle(): Observable<MutableList<Article>>
 }

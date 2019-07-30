@@ -44,5 +44,13 @@ class Page {
                 SingleToast.showToast(R.string.error_bad_link)
             }
         }
+
+        /**
+         * to WebView
+         *
+         */
+        fun toWebSite(url: String) {
+
+        }
     }
 }

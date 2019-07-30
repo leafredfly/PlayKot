@@ -1,5 +1,6 @@
 package com.yl.kot.data
 
+import com.yl.kot.data.entity.Article
 import com.yl.kot.data.entity.ArticleList
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.data.entity.User
@@ -64,11 +65,23 @@ object DataManager {
 
     /**
      * 获取首页文章列表
+     *
      */
     fun getHomeArticle(page: Int): Observable<ArticleList> {
         return ApiClient.getApiService()
             .getHomeArticle(page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * 获取首页置顶文章列表
+     *
+     */
+    fun getHomeTopArticle(): Observable<MutableList<Article>> {
+        return ApiClient.getApiService()
+                .getHomeTopArticle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }

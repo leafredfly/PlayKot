@@ -1,9 +1,17 @@
 package com.yl.kot.feature.home
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.base.BaseRecyclerAdapter
 import com.yl.kot.base.BaseViewHolder
@@ -24,18 +32,53 @@ class ArticleAdapter : BaseRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Art
 
     inner class ArticleViewHolder(itemView: View) : BaseViewHolder<Article>(itemView) {
 
+        private val mTagColorArray = arrayOf("#4CAF50", "#E64A19", "#7B1FA2", "#FF9800")
+
         private lateinit var tvTitle: TextView
+        private lateinit var tvAuthor: TextView
+        private lateinit var tvDate: TextView
+        private lateinit var llTagGroup: LinearLayout
+        private lateinit var mContext: Context
 
         override fun onViewBinding(itemView: View) {
+            mContext = itemView.context
             tvTitle = itemView.findViewById(R.id.tv_home_article_title)
+            tvAuthor = itemView.findViewById(R.id.tv_home_article_author)
+            tvDate = itemView.findViewById(R.id.tv_home_article_date)
+            llTagGroup = itemView.findViewById(R.id.ll_home_article_tags)
         }
 
         override fun onDataBinding(data: Article) {
-            tvTitle.text = data.title
+            if (data.top) {
+                val ss = SpannableString(mContext.getString(R.string.home_top_article_tag, data.title))
+                // 3 = prefix text length
+                ss.setSpan(ForegroundColorSpan(Color.RED), 0, 3, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+                tvTitle.text = ss
+            } else {
+                tvTitle.text = data.title
+            }
+            tvAuthor.text = data.author
+            tvDate.text = data.niceDate
+            // set tags
+            llTagGroup.removeAllViews()
+            if (data.tagList.isNotEmpty()) {
+                llTagGroup.visibility = View.VISIBLE
+                for (tag in data.tagList) {
+                    val tagView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.view_tag_text_view, llTagGroup, false)
+                            as TextView
+                    tagView.text = tag.name
+                    val gradientDrawable = tagView.background as GradientDrawable
+                    gradientDrawable.setColor(Color.parseColor(mTagColorArray.random()))
+                    llTagGroup.addView(tagView)
+                }
+            } else {
+                llTagGroup.visibility = View.GONE
+            }
         }
 
         override fun onHolderClick(data: Article) {
-
+            Page.toWebSite(data.link)
         }
     }
 }

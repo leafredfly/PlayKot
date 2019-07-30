@@ -8,6 +8,7 @@ import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.Article
 import com.yl.kot.data.entity.Banner
 import com.yl.kot.view.banner.BannerView
+import com.yl.kot.view.decoration.HomeArticleItemDecoration
 
 class HomeActivity : BaseActivity(), HomeContract.View {
 
@@ -33,6 +34,7 @@ class HomeActivity : BaseActivity(), HomeContract.View {
         val llm = LinearLayoutManager(this)
         llm.orientation = RecyclerView.VERTICAL
         rvArticleList.layoutManager = llm
+        rvArticleList.addItemDecoration(HomeArticleItemDecoration())
         rvArticleList.adapter = mArticleAdapter
 
         refreshLayout.setOnRefreshListener {
