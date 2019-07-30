@@ -78,7 +78,7 @@ class ArticleAdapter : BaseRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Art
         }
 
         override fun onHolderClick(data: Article) {
-            Page.toWebSite(data.link)
+            Page.toWebSite(data.link, data.title)
         }
     }
 }

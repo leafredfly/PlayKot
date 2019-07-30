@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import com.yl.kot.feature.home.HomeActivity
 import com.yl.kot.feature.login.LoginActivity
+import com.yl.kot.feature.web.WebViewActivity
 import com.yl.kot.utils.SingleToast
 
 /**
@@ -49,8 +50,12 @@ class Page {
          * to WebView
          *
          */
-        fun toWebSite(url: String) {
-
+        fun toWebSite(url: String, websiteTitle: String) {
+            val activity = App.getInstance().topActivity()
+            val intent = Intent(activity, WebViewActivity::class.java)
+            intent.putExtra(Constants.EXTRA_URL, url)
+            intent.putExtra(Constants.EXTRA_WEBSITE_TITLE, websiteTitle)
+            activity.startActivity(intent)
         }
     }
 }
