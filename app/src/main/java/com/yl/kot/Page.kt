@@ -5,6 +5,7 @@ import android.net.Uri
 import com.yl.kot.feature.home.HomeActivity
 import com.yl.kot.feature.login.LoginActivity
 import com.yl.kot.feature.search.SearchActivity
+import com.yl.kot.feature.search.SearchDetailActivity
 import com.yl.kot.feature.web.WebViewActivity
 import com.yl.kot.utils.AwesomeSnackBar
 
@@ -66,6 +67,17 @@ class Page {
         fun toSearch() {
             val activity = App.getInstance().topActivity()
             val intent = Intent(activity, SearchActivity::class.java)
+            activity.startActivity(intent)
+        }
+
+        /**
+         * to Search detail
+         *
+         */
+        fun toSearchDetail(keyword: String) {
+            val activity = App.getInstance().topActivity()
+            val intent = Intent(activity, SearchDetailActivity::class.java)
+            intent.putExtra(Constants.EXTRA_SEARCH_KEY, keyword)
             activity.startActivity(intent)
         }
     }

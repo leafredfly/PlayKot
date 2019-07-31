@@ -3,6 +3,8 @@ package com.yl.kot.feature.home
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
+import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -50,12 +52,12 @@ class ArticleAdapter : BaseRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Art
 
         override fun onDataBinding(data: Article) {
             if (data.top) {
-                val ss = SpannableString(mContext.getString(R.string.home_top_article_tag, data.title))
+                val ss = SpannableString(mContext.getString(R.string.home_top_article_tag, convertHtml2String(data.title)))
                 // 3 = prefix text length
                 ss.setSpan(ForegroundColorSpan(Color.RED), 0, 3, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
                 tvTitle.text = ss
             } else {
-                tvTitle.text = data.title
+                tvTitle.text = convertHtml2String(data.title)
             }
             tvAuthor.text = data.author
             tvDate.text = data.niceDate
@@ -78,7 +80,13 @@ class ArticleAdapter : BaseRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Art
         }
 
         override fun onHolderClick(data: Article) {
-            Page.toWebSite(data.link, data.title)
+            Page.toWebSite(data.link, convertHtml2String(data.title).toString())
+        }
+
+        private fun convertHtml2String(html: String): Spanned {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
+            else Html.fromHtml(html)
         }
     }
 }

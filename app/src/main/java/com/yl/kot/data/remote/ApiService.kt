@@ -1,9 +1,6 @@
 package com.yl.kot.data.remote
 
-import com.yl.kot.data.entity.Article
-import com.yl.kot.data.entity.ArticleList
-import com.yl.kot.data.entity.Banner
-import com.yl.kot.data.entity.User
+import com.yl.kot.data.entity.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -67,4 +64,21 @@ interface ApiService {
      */
     @GET("/article/top/json")
     fun getHomeTopArticle(): Observable<MutableList<Article>>
+
+    /**
+     * 获取热搜列表
+     *
+     */
+    @GET("/hotkey/json")
+    fun getHotWords(): Observable<List<HotWord>>
+
+    /**
+     * 搜索文章
+     *
+     * @param keyword 搜索关键字
+     * @param page 页码, 从0开始
+     */
+    @FormUrlEncoded
+    @POST("/article/query/{page}/json")
+    fun searchArticle(@Field("k") keyword: String?, @Path("page") page: Int): Observable<ArticleList>
 }

@@ -1,13 +1,11 @@
 package com.yl.kot.data
 
-import com.yl.kot.data.entity.Article
-import com.yl.kot.data.entity.ArticleList
-import com.yl.kot.data.entity.Banner
-import com.yl.kot.data.entity.User
+import com.yl.kot.data.entity.*
 import com.yl.kot.data.remote.ApiClient
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.http.GET
 
 /**
  * Author: Want-Sleep
@@ -83,5 +81,28 @@ object DataManager {
                 .getHomeTopArticle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * 获取热搜列表
+     *
+     */
+    @GET("/hotkey/json")
+    fun getHotWords(): Observable<List<HotWord>> {
+        return ApiClient.getApiService()
+            .getHotWords()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * 搜索文章
+     *
+     */
+    fun searchArticle(keyword: String?, page: Int): Observable<ArticleList> {
+        return ApiClient.getApiService()
+            .searchArticle(keyword, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 }

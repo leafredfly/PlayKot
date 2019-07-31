@@ -12,4 +12,7 @@
 
     <!-- divider -->
     <color name="divider">#BDBDBD</color>
+
+    <!-- normal -->
+    <color name="white">#FFFFFF</color>
 </resources>

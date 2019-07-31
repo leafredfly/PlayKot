@@ -11,17 +11,14 @@ import com.yl.kot.utils.ScreenUtils
  * Desc:
  */
 
-class HomeArticleItemDecoration : RecyclerView.ItemDecoration() {
+class HotWordItemDecoration : RecyclerView.ItemDecoration() {
 
     private val mCellSpace: Int = ScreenUtils.dp2px(8)
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val viewPosition = parent.getChildLayoutPosition(view)
-        if (viewPosition == 0) {
-            outRect.top = mCellSpace
-        }
+        outRect.top = 0
         outRect.bottom = mCellSpace
-        outRect.left = mCellSpace
+        outRect.left = 0
         outRect.right = mCellSpace
     }
 }

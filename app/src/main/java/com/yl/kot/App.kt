@@ -62,7 +62,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     /**
      * 获取栈顶Activity
      */
-    fun topActivity(): Activity = mActivityStack[0]
+    fun topActivity(): Activity = mActivityStack[mActivityStack.size - 1]
 
     fun isForeground(): Boolean = mActivityCount > 0
 

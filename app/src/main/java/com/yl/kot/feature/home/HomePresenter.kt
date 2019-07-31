@@ -21,8 +21,8 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeContract.View>(
     override fun getBanner() {
         DataManager.getBanner()
             .subscribe(object : RemoteDataObserver<List<Banner>>(this) {
-                override fun onNext(t: List<Banner>) {
-                    mView?.showBanner(t)
+                override fun onNext(response: List<Banner>) {
+                    mView?.showBanner(response)
                 }
             })
     }

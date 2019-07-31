@@ -34,5 +34,6 @@
         <activity
             android:name=".feature.search.SearchActivity"
             android:label="@string/search_title" />
+        <activity android:name=".feature.search.SearchDetailActivity" />
     </application>
 </manifest>

@@ -1,6 +1,5 @@
-package com.yl.kot.feature.home
+package com.yl.kot.feature.search
 
-import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,46 +7,49 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader
-import com.yl.kot.Page
+import com.yl.kot.Constants
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.Article
-import com.yl.kot.data.entity.Banner
-import com.yl.kot.view.banner.BannerView
+import com.yl.kot.data.entity.HotWord
+import com.yl.kot.feature.home.ArticleAdapter
 import com.yl.kot.view.decoration.ArticleItemDecoration
 
-class HomeActivity : BaseActivity(), HomeContract.View {
+/**
+ * Author: Want-Sleep
+ * Date: 2019/07/31
+ * Desc:
+ */
+
+class SearchDetailActivity : BaseActivity(), SearchContract.View {
 
     private lateinit var refreshLayout: SmartRefreshLayout
-    private lateinit var bannerHome: BannerView
     private lateinit var rvArticleList: RecyclerView
 
-    private val mHomePresenter: HomeContract.Presenter by lazy {
-        HomePresenter(this)
+    private val mSearchPresenter: SearchContract.Presenter by lazy {
+        SearchPresenter(this)
     }
     private val mArticleAdapter: ArticleAdapter by lazy {
         ArticleAdapter()
     }
     private var mPage = 0
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_home, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_search -> Page.toSearch()
+        if (item.itemId == android.R.id.home) {
+            finish()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun getLayoutId(): Int = R.layout.activity_home
+    override fun getLayoutId(): Int = R.layout.activity_search_detail
 
     override fun initView() {
-        refreshLayout = findViewById(R.id.refresh_home)
-        bannerHome = findViewById(R.id.banner_home)
-        rvArticleList = findViewById(R.id.rv_home_article_list)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val keyword: String? = intent.getStringExtra(Constants.EXTRA_SEARCH_KEY)
+        title = keyword
+
+        refreshLayout = findViewById(R.id.refresh_search_detail)
+        rvArticleList = findViewById(R.id.rv_search_detail_article_list)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = RecyclerView.VERTICAL
@@ -64,23 +66,21 @@ class HomeActivity : BaseActivity(), HomeContract.View {
         refreshLayout.setRefreshFooter(refreshFooter)
         refreshLayout.setOnRefreshListener {
             mPage = 0
-            mHomePresenter.getArticle(mPage)
-            mHomePresenter.getBanner()
+            mSearchPresenter.searchArticle(keyword, mPage)
         }
         refreshLayout.setOnLoadMoreListener {
             mPage++
-            mHomePresenter.getArticle(mPage)
+            mSearchPresenter.searchArticle(keyword, mPage)
         }
 
-        mHomePresenter.getBanner()
-        mHomePresenter.getArticle(0)
+        mSearchPresenter.searchArticle(keyword, mPage)
     }
 
-    override fun showBanner(bannerList: List<Banner>) {
-        bannerHome.setBanner(bannerList)
+    override fun showHotWords(hotWordList: List<HotWord>) {
+
     }
 
-    override fun showArticle(articleList: List<Article>) {
+    override fun showSearchResult(articleList: List<Article>) {
         if (mPage == 0) {
             refreshLayout.finishRefresh()
             mArticleAdapter.refresh(articleList)
