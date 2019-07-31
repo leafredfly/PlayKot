@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.User
-import com.yl.kot.utils.SingleToast
+import com.yl.kot.utils.AwesomeSnackBar
 
 class LoginActivity : BaseActivity(), LoginContract.View {
     private val mPresenter: LoginContract.Presenter by lazy {
@@ -134,7 +134,7 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         mBtnGo.isEnabled = true
 
         if (user == null) {
-            SingleToast.showToast(R.string.login_failed)
+            AwesomeSnackBar.show(R.string.login_failed)
             return
         }
 
@@ -151,7 +151,7 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         mBtnGo.isEnabled = true
 
         if (user == null) {
-            SingleToast.showToast(R.string.register_failed)
+            AwesomeSnackBar.show(R.string.register_failed)
             return
         }
 

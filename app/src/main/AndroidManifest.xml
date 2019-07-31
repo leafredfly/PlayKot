@@ -31,5 +31,8 @@
             android:label="@string/home_title"
             android:launchMode="singleTask" />
         <activity android:name=".feature.web.WebViewActivity" />
+        <activity
+            android:name=".feature.search.SearchActivity"
+            android:label="@string/search_title" />
     </application>
 </manifest>

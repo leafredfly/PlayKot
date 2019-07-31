@@ -1,8 +1,14 @@
 package com.yl.kot.feature.home
 
+import android.view.Menu
+import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader
+import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.Article
@@ -24,6 +30,18 @@ class HomeActivity : BaseActivity(), HomeContract.View {
     }
     private var mPage = 0
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_home_search -> Page.toSearch()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun getLayoutId(): Int = R.layout.activity_home
 
     override fun initView() {
@@ -37,6 +55,13 @@ class HomeActivity : BaseActivity(), HomeContract.View {
         rvArticleList.addItemDecoration(HomeArticleItemDecoration())
         rvArticleList.adapter = mArticleAdapter
 
+        val refreshHeader = BezierRadarHeader(this)
+        refreshHeader.setPrimaryColorId(R.color.colorPrimary)
+        refreshHeader.setAccentColorId(R.color.colorAccent)
+        val refreshFooter = BallPulseFooter(this)
+        refreshFooter.setAnimatingColor(ContextCompat.getColor(this, R.color.colorAccent))
+        refreshLayout.setRefreshHeader(refreshHeader)
+        refreshLayout.setRefreshFooter(refreshFooter)
         refreshLayout.setOnRefreshListener {
             mPage = 0
             mHomePresenter.getArticle(mPage)

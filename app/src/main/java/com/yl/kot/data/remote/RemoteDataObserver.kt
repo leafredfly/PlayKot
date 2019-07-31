@@ -9,7 +9,7 @@ import com.yl.kot.R
 import com.yl.kot.base.IBasePresenter
 import com.yl.kot.base.IBaseView
 import com.yl.kot.feature.login.LoginActivity
-import com.yl.kot.utils.SingleToast
+import com.yl.kot.utils.AwesomeSnackBar
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import retrofit2.HttpException
@@ -45,30 +45,31 @@ open class RemoteDataObserver<T>(private val basePresenter: IBasePresenter<*>) :
         }
         when (throwable) {
             is ApiException -> handleApiError(throwable)
-            is SocketTimeoutException -> SingleToast.showToast(R.string.error_timeout)
-            is JsonSyntaxException -> SingleToast.showToast(R.string.error_json_syntax)
-            is IOException -> SingleToast.showToast(R.string.error_network)
-            is HttpException -> SingleToast.showToast(throwable.message())
-            else -> SingleToast.showToast(R.string.error_unknown)
+            is SocketTimeoutException -> AwesomeSnackBar.show(R.string.error_timeout)
+            is JsonSyntaxException -> AwesomeSnackBar.show(R.string.error_json_syntax)
+            is IOException -> AwesomeSnackBar.show(R.string.error_network)
+            is HttpException -> AwesomeSnackBar.show(throwable.message())
+            else -> AwesomeSnackBar.show(R.string.error_unknown)
         }
     }
 
     private fun handleApiError(apiException: ApiException) {
-        SingleToast.showToast(apiException.errorMsg)
-
-        if (apiException.errorCode == ApiException.CODE_NO_LOGIN) {
-            val activity: Activity = App.getInstance().topActivity()
-            val isForeground = App.getInstance().isForeground()
-            if (isForeground && activity.javaClass != LoginActivity::class.java) {
-                AlertDialog.Builder(activity)
-                    .setTitle(null)
-                    .setMessage(R.string.error_not_login)
-                    .setPositiveButton(R.string.login_now) { _, _ ->
-                        Page.toLogin()
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
+        when (apiException.errorCode) {
+            ApiException.CODE_NO_LOGIN -> {
+                val activity: Activity = App.getInstance().topActivity()
+                val isForeground = App.getInstance().isForeground()
+                if (isForeground && activity.javaClass != LoginActivity::class.java) {
+                    AlertDialog.Builder(activity)
+                        .setTitle(null)
+                        .setMessage(R.string.error_not_login)
+                        .setPositiveButton(R.string.login_now) { _, _ ->
+                            Page.toLogin()
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                }
             }
+            else -> AwesomeSnackBar.show(apiException.errorMsg)
         }
     }
 }

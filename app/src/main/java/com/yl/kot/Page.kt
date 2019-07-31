@@ -4,8 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import com.yl.kot.feature.home.HomeActivity
 import com.yl.kot.feature.login.LoginActivity
+import com.yl.kot.feature.search.SearchActivity
 import com.yl.kot.feature.web.WebViewActivity
-import com.yl.kot.utils.SingleToast
+import com.yl.kot.utils.AwesomeSnackBar
 
 /**
  * Author: Want-Sleep
@@ -42,7 +43,7 @@ class Page {
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 activity.startActivity(i)
             } catch (e: Exception) {
-                SingleToast.showToast(R.string.error_bad_link)
+                AwesomeSnackBar.show(R.string.error_bad_link)
             }
         }
 
@@ -55,6 +56,16 @@ class Page {
             val intent = Intent(activity, WebViewActivity::class.java)
             intent.putExtra(Constants.EXTRA_URL, url)
             intent.putExtra(Constants.EXTRA_WEBSITE_TITLE, websiteTitle)
+            activity.startActivity(intent)
+        }
+
+        /**
+         * to Search
+         *
+         */
+        fun toSearch() {
+            val activity = App.getInstance().topActivity()
+            val intent = Intent(activity, SearchActivity::class.java)
             activity.startActivity(intent)
         }
     }
