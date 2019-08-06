@@ -90,4 +90,13 @@ class HomeActivity : BaseActivity(), HomeContract.View {
         }
         if (articleList.size < 20) refreshLayout.setNoMoreData(true)
     }
+
+    override fun dataLoadFail(resId: Int) {
+        super.dataLoadFail(resId)
+        refreshLayout.finishRefresh()
+    }
+
+    override fun reloadData() {
+        refreshLayout.autoRefresh()
+    }
 }

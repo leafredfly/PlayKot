@@ -47,9 +47,15 @@ open class RemoteDataObserver<T>(private val basePresenter: IBasePresenter<*>) :
             is ApiException -> handleApiError(throwable)
             is SocketTimeoutException -> AwesomeSnackBar.show(R.string.error_timeout)
             is JsonSyntaxException -> AwesomeSnackBar.show(R.string.error_json_syntax)
-            is IOException -> AwesomeSnackBar.show(R.string.error_network)
+            is IOException -> {
+                mBaseViewRef.get()?.dataLoadFail(R.string.error_network)
+                AwesomeSnackBar.show(R.string.error_network)
+            }
             is HttpException -> AwesomeSnackBar.show(throwable.message())
-            else -> AwesomeSnackBar.show(R.string.error_unknown)
+            else -> {
+                mBaseViewRef.get()?.dataLoadFail(R.string.error_unknown)
+                AwesomeSnackBar.show(R.string.error_unknown)
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import com.yl.kot.Constants
 import com.yl.kot.R
@@ -43,6 +44,12 @@ class WebViewActivity : BaseActivity() {
         webSettings.domStorageEnabled = true
         webSettings.javaScriptEnabled = true
         webSettings.javaScriptCanOpenWindowsAutomatically = true
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                view?.loadUrl(url)
+                return true
+            }
+        }
 
         val url = intent.getStringExtra(Constants.EXTRA_URL)
         webView.loadUrl(url)

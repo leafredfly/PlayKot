@@ -16,4 +16,6 @@ interface IBaseView {
     fun getStringValue(@StringRes resId: Int, vararg formatArgs: Any): String {
         return App.getInstance().getString(resId, *formatArgs)
     }
+
+    fun dataLoadFail(@StringRes resId: Int)
 }

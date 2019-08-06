@@ -33,6 +33,8 @@ class SearchActivity : BaseActivity(), SearchContract.View {
 
     override fun getLayoutId(): Int = R.layout.activity_search
 
+    override fun showDataLoadFailView(): Boolean = false
+
     override fun initView() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val rvHotWords = findViewById<RecyclerView>(R.id.rv_search_hot_words)

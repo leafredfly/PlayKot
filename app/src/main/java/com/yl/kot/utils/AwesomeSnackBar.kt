@@ -1,6 +1,7 @@
 package com.yl.kot.utils
 
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.yl.kot.App
@@ -14,7 +15,7 @@ import com.yl.kot.R
  */
 class AwesomeSnackBar {
     companion object {
-        fun show(resId: Int) {
+        fun show(@StringRes resId: Int) {
             show(App.getInstance().getString(resId))
         }
 
