@@ -15,7 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.yl.kot.Page
 import com.yl.kot.R
-import com.yl.kot.base.BaseRecyclerAdapter
+import com.yl.kot.base.BaseEmptyRecyclerAdapter
 import com.yl.kot.base.BaseViewHolder
 import com.yl.kot.data.entity.Article
 
@@ -25,9 +25,9 @@ import com.yl.kot.data.entity.Article
  * Desc:
  */
 
-class ArticleAdapter : BaseRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Article>() {
+class ArticleAdapter : BaseEmptyRecyclerAdapter<ArticleAdapter.ArticleViewHolder, Article>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+    override fun onCreateCommonViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_article, parent, false)
         return ArticleViewHolder(view)
     }

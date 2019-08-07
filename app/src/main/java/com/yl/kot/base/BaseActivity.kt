@@ -39,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
         rootView.addView(mFailLayout)
 
         (mFailLayout.findViewById(R.id.tv_load_fail_cause) as TextView).text = getString(resId)
-        mFailLayout.findViewById<Button>(R.id.btn_load_fail_retry)?.setOnClickListener {
+        mFailLayout.findViewById<Button>(R.id.btn_load_fail_retry).setOnClickListener {
             rootView.removeView(mFailLayout)
             reloadData()
         }

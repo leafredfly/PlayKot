@@ -8,6 +8,7 @@
     <string name="error_unknown">系统繁忙，请稍后再试</string>
     <string name="error_bad_link">链接已损坏</string>
     <string name="fail_page_retry">重新加载</string>
+    <string name="empty_list">没有更多数据~</string>
 
     <!-- error not login -->
     <string name="error_not_login">您还没登录呢，登录体验更多功能哦</string>
