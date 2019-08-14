@@ -22,8 +22,7 @@ class Page {
          */
         fun toLogin() {
             val activity = App.getInstance().topActivity()
-            val intent = Intent(activity, LoginActivity::class.java)
-            activity.startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN)
+            activity.startActivityForResult(LoginActivity::class.java, LoginActivity.REQUEST_CODE_LOGIN)
         }
 
         /**
@@ -31,8 +30,7 @@ class Page {
          */
         fun toHome() {
             val activity = App.getInstance().topActivity()
-            val intent = Intent(activity, HomeActivity::class.java)
-            activity.startActivity(intent)
+            activity.startActivity(HomeActivity::class.java)
         }
 
         /**
@@ -66,8 +64,7 @@ class Page {
          */
         fun toSearch() {
             val activity = App.getInstance().topActivity()
-            val intent = Intent(activity, SearchActivity::class.java)
-            activity.startActivity(intent)
+            activity.startActivity(SearchActivity::class.java)
         }
 
         /**
