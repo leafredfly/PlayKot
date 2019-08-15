@@ -55,7 +55,7 @@ interface LoginContract {
          * @param username   用户名
          * @param password   密码
          */
-        fun login(username: String?, password: String?)
+        fun login(username: String, password: String)
 
         /**
          * 用户注册
@@ -64,7 +64,7 @@ interface LoginContract {
          * @param password   密码
          * @param rePassword 密码重复确认
          */
-        fun register(username: String?, password: String?, rePassword: String?)
+        fun register(username: String, password: String, rePassword: String)
 
         /**
          * 判断用户名是否合法
@@ -72,7 +72,7 @@ interface LoginContract {
          * @param username   用户名
          * @return 合法时返回<code>NULL</code>，不合法返回错误信息
          */
-        fun checkUsername(username: String?): String?
+        fun checkUsername(username: String): String?
 
         /**
          * 判断密码是否合法
@@ -80,7 +80,7 @@ interface LoginContract {
          * @param password   密码
          * @return 合法时返回<code>NULL</code>，不合法返回错误信息
          */
-        fun checkPassword(password: String?): String?
+        fun checkPassword(password: String): String?
 
         /**
          * 判断确认密码是否合法，仅判断它与第一次输入的密码是否相同即可
@@ -89,6 +89,6 @@ interface LoginContract {
          * @param rePassword 密码重复确认
          * @return 合法时返回<code>NULL</code>，不合法返回错误信息
          */
-        fun checkRePassword(password: String?, rePassword: String?): String?
+        fun checkRePassword(password: String, rePassword: String): String?
     }
 }

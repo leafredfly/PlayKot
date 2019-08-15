@@ -1,7 +1,6 @@
 package com.yl.kot.data.remote
 
 import com.yl.kot.data.entity.*
-import io.reactivex.Observable
 import retrofit2.http.*
 
 /**
@@ -14,7 +13,7 @@ interface ApiService {
      * 首页banner
      */
     @GET("/banner/json")
-    fun getBanner(): Observable<List<Banner>>
+    suspend fun getBanner(): List<Banner>
 
     /**
      * 登录
@@ -24,10 +23,10 @@ interface ApiService {
      */
     @FormUrlEncoded
     @POST("/user/login")
-    fun login(
+    suspend fun login(
         @Field("username") username: String,
         @Field("password") password: String
-    ): Observable<User>
+    ): User
 
     /**
      * 注册
@@ -38,17 +37,17 @@ interface ApiService {
      */
     @FormUrlEncoded
     @POST("/user/login")
-    fun register(
+    suspend fun register(
         @Field("username") username: String,
         @Field("password") password: String,
         @Field("repassword") rePassword: String
-    ): Observable<User>
+    ): User
 
     /**
      * 注销登录
      */
     @POST("user/logout/json")
-    fun logout(): Observable<Any>
+    suspend fun logout(): Any
 
     /**
      * 获取首页文章列表
@@ -56,21 +55,21 @@ interface ApiService {
      * @param page page start from 0
      */
     @GET("/article/list/{page}/json")
-    fun getHomeArticle(@Path("page") page: Int): Observable<ArticleList>
+    suspend fun getHomeArticle(@Path("page") page: Int): ArticleList
 
     /**
      * 获取首页置顶文章列表
      *
      */
     @GET("/article/top/json")
-    fun getHomeTopArticle(): Observable<MutableList<Article>>
+    suspend fun getHomeTopArticle(): MutableList<Article>
 
     /**
      * 获取热搜列表
      *
      */
     @GET("/hotkey/json")
-    fun getHotWords(): Observable<List<HotWord>>
+    suspend fun getHotWords(): List<HotWord>
 
     /**
      * 搜索文章
@@ -80,5 +79,5 @@ interface ApiService {
      */
     @FormUrlEncoded
     @POST("/article/query/{page}/json")
-    fun searchArticle(@Field("k") keyword: String?, @Path("page") page: Int): Observable<ArticleList>
+    suspend fun searchArticle(@Field("k") keyword: String?, @Path("page") page: Int): ArticleList
 }

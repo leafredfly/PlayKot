@@ -1,11 +1,9 @@
 package com.yl.kot.feature.home
 
 import com.yl.kot.base.BasePresenter
-import com.yl.kot.data.DataManager
 import com.yl.kot.data.entity.Article
-import com.yl.kot.data.entity.ArticleList
-import com.yl.kot.data.entity.Banner
-import com.yl.kot.data.remote.RemoteDataObserver
+import com.yl.kot.data.remote.ApiClient
+import kotlinx.coroutines.launch
 
 /**
  * Author: Want-Sleep
@@ -19,12 +17,9 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeContract.View>(
     private var mTopArticleList: MutableList<Article>? = null
 
     override fun getBanner() {
-        DataManager.getBanner()
-            .subscribe(object : RemoteDataObserver<List<Banner>>(this) {
-                override fun onNext(response: List<Banner>) {
-                    mView?.showBanner(response)
-                }
-            })
+        launch {
+            mView?.showBanner(ApiClient.getApiService().getBanner())
+        }
     }
 
     override fun getArticle(page: Int) {
@@ -32,36 +27,32 @@ class HomePresenter(view: HomeContract.View) : BasePresenter<HomeContract.View>(
             getTopArticle()
             mNormalArticleList = null
         }
-        DataManager.getHomeArticle(page)
-            .subscribe(object : RemoteDataObserver<ArticleList>(this) {
-                override fun onNext(response: ArticleList) {
-                    if (page == 0) {
-                        mNormalArticleList = response.articleList
-                        mTopArticleList?.let {
-                            it.addAll(response.articleList)
-                            mView?.showArticle(it)
-                        }
-                    } else {
-                        mView?.showArticle(response.articleList)
-                    }
+        launch {
+            val articleList = ApiClient.getApiService().getHomeArticle(page)
+            if (page == 0) {
+                mNormalArticleList = articleList.articleList
+                mTopArticleList?.let {
+                    it.addAll(articleList.articleList)
+                    mView?.showArticle(it)
                 }
-            })
+            } else {
+                mView?.showArticle(articleList.articleList)
+            }
+        }
     }
 
     override fun getTopArticle() {
         mTopArticleList = null
-        DataManager.getHomeTopArticle()
-                .subscribe(object : RemoteDataObserver<MutableList<Article>>(this) {
-                    override fun onNext(response: MutableList<Article>) {
-                        for (article in response) {
-                            article.top = true
-                        }
-                        mTopArticleList = response
-                        mNormalArticleList?.let {
-                            response.addAll(it)
-                            mView?.showArticle(response)
-                        }
-                    }
-                })
+        launch {
+            val topArticleList = ApiClient.getApiService().getHomeTopArticle()
+            for (article in topArticleList) {
+                article.top = true
+            }
+            mTopArticleList = topArticleList
+            mNormalArticleList?.let {
+                topArticleList.addAll(it)
+                mView?.showArticle(topArticleList)
+            }
+        }
     }
 }

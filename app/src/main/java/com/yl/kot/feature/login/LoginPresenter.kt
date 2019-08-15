@@ -2,9 +2,10 @@ package com.yl.kot.feature.login
 
 import com.yl.kot.R
 import com.yl.kot.base.BasePresenter
-import com.yl.kot.data.entity.User
-import com.yl.kot.data.DataManager
-import com.yl.kot.data.remote.RemoteDataObserver
+import com.yl.kot.data.remote.ApiClient
+import com.yl.kot.data.remote.RemoteErrorHandler
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 
 /**
  * Created on 2019/7/27.
@@ -21,30 +22,27 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
      * @param username   用户名
      * @param password   密码
      */
-    override fun login(username: String?, password: String?) {
-        val checkUsernameResult: String? = checkUsername(username)
-        if (checkUsernameResult != null) {
-            mView?.showUsernameError(checkUsernameResult)
+    override fun login(username: String, password: String) {
+        val checkUsernameResult= checkUsername(username)
+        checkUsernameResult?.let {
+            mView?.showUsernameError(it)
             return
         }
 
-        val checkPasswordResult: String? = checkPassword(password)
-        if (checkPasswordResult != null) {
-            mView?.showPasswordError(checkPasswordResult)
+        val checkPasswordResult = checkPassword(password)
+        checkPasswordResult?.let {
+            mView?.showPasswordError(it)
             return
         }
 
-        DataManager.login(username!!, password!!)
-            .subscribe(object : RemoteDataObserver<User>(this) {
-                override fun onNext(response: User) {
-                    mView?.showLoginResult(response)
-                }
-
-                override fun onError(throwable: Throwable) {
-                    super.onError(throwable)
-                    mView?.showLoginResult(null)
-                }
-            })
+        launch(CoroutineExceptionHandler{ _, throwable ->
+            mView?.let {
+                RemoteErrorHandler.handle(it, throwable)
+                mView?.showLoginResult(null)
+            }
+        }) {
+            mView?.showLoginResult(ApiClient.getApiService().login(username, password))
+        }
     }
 
     /**
@@ -54,7 +52,7 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
      * @param password   密码
      * @param rePassword 密码重复确认
      */
-    override fun register(username: String?, password: String?, rePassword: String?) {
+    override fun register(username: String, password: String, rePassword: String) {
         val checkUsernameResult: String? = checkUsername(username)
         if (checkUsernameResult != null) {
             mView?.showUsernameError(checkUsernameResult)
@@ -73,17 +71,14 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
             return
         }
 
-        DataManager.register(username!!, password!!, rePassword!!)
-            .subscribe(object : RemoteDataObserver<User>(this) {
-                override fun onNext(response: User) {
-                    mView?.showRegisterResult(response)
-                }
-
-                override fun onError(throwable: Throwable) {
-                    super.onError(throwable)
-                    mView?.showRegisterResult(null)
-                }
-            })
+        launch(CoroutineExceptionHandler{ _, throwable ->
+            mView?.let {
+                RemoteErrorHandler.handle(it, throwable)
+                mView?.showRegisterResult(null)
+            }
+        }) {
+            mView?.showRegisterResult(ApiClient.getApiService().register(username, password, rePassword))
+        }
     }
 
     /**
@@ -92,10 +87,10 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
      * @param username   用户名
      * @return 合法时返回<code>NULL</code>，不合法返回错误信息
      */
-    override fun checkUsername(username: String?): String? {
-        if (username == null || username.isEmpty()) return mView!!.getStringValue(R.string.error_empty_username)
+    override fun checkUsername(username: String): String? {
+        if (username.isEmpty()) return mView?.getStringValue(R.string.error_empty_username)
         if (username.length < 4 || username.length > 16) {
-            return mView!!.getStringValue(R.string.error_username_length, 4, 16)
+            return mView?.getStringValue(R.string.error_username_length, 4, 16)
         }
         return null
     }
@@ -106,10 +101,10 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
      * @param password   密码
      * @return 合法时返回<code>NULL</code>，不合法返回错误信息
      */
-    override fun checkPassword(password: String?): String? {
-        if (password == null || password.isEmpty()) return mView!!.getStringValue(R.string.error_empty_password)
+    override fun checkPassword(password: String): String? {
+        if (password.isEmpty()) return mView?.getStringValue(R.string.error_empty_password)
         if (password.length < 4 || password.length > 16) {
-            return mView!!.getStringValue(R.string.error_password_length, 4, 16)
+            return mView?.getStringValue(R.string.error_password_length, 4, 16)
         }
         return null
     }
@@ -121,11 +116,11 @@ class LoginPresenter(view: LoginContract.View) : BasePresenter<LoginContract.Vie
      * @param rePassword 密码重复确认
      * @return 合法时返回<code>NULL</code>，不合法返回错误信息
      */
-    override fun checkRePassword(password: String?, rePassword: String?): String? {
+    override fun checkRePassword(password: String, rePassword: String): String? {
         return if (password == rePassword) {
             null
         } else {
-            mView!!.getStringValue(R.string.error_twice_password_not_equals)
+            mView?.getStringValue(R.string.error_twice_password_not_equals)
         }
     }
 }

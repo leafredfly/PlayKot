@@ -4,7 +4,6 @@ import com.yl.kot.data.remote.convert.ConverterFactory
 import com.yl.kot.data.remote.interceptor.HttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
 
 
@@ -34,7 +33,6 @@ class ApiClient private constructor() {
         mRetrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(buildOkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(ConverterFactory.create())
                 .build()
         mApiService = mRetrofit.create(ApiService::class.java)

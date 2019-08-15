@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yl.kot.data.entity.Banner
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.launch
 
 /**
  * Author: Want-Sleep
@@ -18,11 +18,13 @@ import java.util.concurrent.TimeUnit
  * Desc: Banner
  */
 
+@ObsoleteCoroutinesApi
 class BannerView : RecyclerView {
 
     private val mBannerAdapter: BannerAdapter
     private val mLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
-    private var mTimerDispose: Disposable? = null
+    private val mTickerChannel = ticker(5_000, 5_000)
+    private var mTimerJob: Job? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -44,18 +46,17 @@ class BannerView : RecyclerView {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         // set timer
-        mTimerDispose = Flowable.interval(5, 5, TimeUnit.SECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {
+        mTimerJob = MainScope().launch {
+            for (it in mTickerChannel) {
                 smoothScrollToPosition(mLayoutManager.findFirstVisibleItemPosition() + 1)
             }
-            .subscribe()
+        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mTimerDispose?.dispose()
+        mTickerChannel.cancel()
+        mTimerJob?.cancel()
     }
 
     fun setBanner(bannerList: List<Banner>) {

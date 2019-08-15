@@ -164,8 +164,8 @@ class LoginActivity : BaseActivity(), LoginContract.View {
     }
 
     private fun clickGo() {
-        val username: String? = mEtUsername.text?.toString()
-        val password: String? = mEtPassword.text?.toString()
+        val username: String = mEtUsername.text.toString()
+        val password: String = mEtPassword.text.toString()
 
         //valid username
         val checkUsernameResult: String? = mPresenter.checkUsername(username)

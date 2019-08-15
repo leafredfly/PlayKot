@@ -1,19 +1,23 @@
 package com.yl.kot.base
 
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import com.yl.kot.data.remote.RemoteErrorHandler
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Author: Want-Sleep
  * Date: 2019/07/25
  * Desc:
  */
-abstract class BasePresenter<T : IBaseView>(view: T) : IBasePresenter<T> {
+abstract class BasePresenter<T : IBaseView>(view: T) : IBasePresenter<T>, CoroutineScope {
 
     protected var mView: T? = null
-    private val mDisposables: CompositeDisposable by lazy {
-        CompositeDisposable()
+    private val mExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        mView?.let {
+            RemoteErrorHandler.handle(it, throwable)
+        }
     }
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.Main + mExceptionHandler
 
     init {
         attachView(view)
@@ -41,14 +45,8 @@ abstract class BasePresenter<T : IBaseView>(view: T) : IBasePresenter<T> {
         mView = null
     }
 
-    override fun getView(): IBaseView? = mView
-
-    override fun addDisposable(disposable: Disposable) {
-        mDisposables.add(disposable)
-    }
-
     override fun destroy() {
-        mDisposables.dispose()
+        cancel()
         detachView()
     }
 }
