@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.yl.kot.App
 import com.yl.kot.Page
 import com.yl.kot.R
 import com.yl.kot.base.BaseRecyclerAdapter
@@ -36,6 +37,7 @@ class HotWordAdapter : BaseRecyclerAdapter<HotWordAdapter.HotWordViewHolder, Hot
         }
 
         override fun onHolderClick(data: HotWord) {
+            App.getInstance().topActivity().finish()
             Page.toSearchDetail(data.name)
         }
     }

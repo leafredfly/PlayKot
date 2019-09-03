@@ -31,6 +31,7 @@ object RemoteErrorHandler {
             }
             is HttpException -> AwesomeSnackBar.show(throwable.message())
             else -> {
+                throwable.printStackTrace()
                 baseView.dataLoadFail(R.string.error_unknown)
                 AwesomeSnackBar.show(R.string.error_unknown)
             }

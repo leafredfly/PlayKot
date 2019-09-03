@@ -12,6 +12,7 @@ import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.Article
 import com.yl.kot.data.entity.HotWord
+import com.yl.kot.data.entity.SearchHistory
 import com.yl.kot.feature.home.ArticleAdapter
 import com.yl.kot.view.decoration.ArticleItemDecoration
 
@@ -76,7 +77,16 @@ class SearchDetailActivity : BaseActivity(), SearchContract.View {
         mSearchPresenter.searchArticle(keyword, mPage)
     }
 
+    override fun reloadData() {
+        mPage = 0
+        mSearchPresenter.searchArticle(intent.getStringExtra(Constants.EXTRA_SEARCH_KEY), mPage)
+    }
+
     override fun showHotWords(hotWordList: List<HotWord>) {
+
+    }
+
+    override fun showSearchHistory(searchHistory: List<SearchHistory>) {
 
     }
 

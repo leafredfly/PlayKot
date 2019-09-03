@@ -51,4 +51,7 @@
     <!-- Search -->
     <string name="search_title">搜索</string>
     <string name="search_hot_words">热门搜索</string>
+    <string name="search_history">搜索记录</string>
+    <string name="search_input_hint">输入你想搜索的内容</string>
+    <string name="search_history_empty">搜索记录空空如也~</string>
 </resources>
