@@ -11,7 +11,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
@@ -24,16 +23,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.login.LoginActivity"
-            android:label="@string/user_login" />
-        <activity
             android:name=".feature.home.HomeActivity"
             android:label="@string/home_title"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".feature.web.WebViewActivity" />
         <activity
             android:name=".feature.search.SearchActivity"
             android:label="@string/search_title" />
         <activity android:name=".feature.search.SearchDetailActivity" />
+        <activity
+            android:name=".feature.collection.CollectionListActivity"
+            android:label="@string/collection_list_title" />
     </application>
+
 </manifest>

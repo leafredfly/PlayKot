@@ -1,5 +1,7 @@
 package com.yl.kot.base
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.yl.kot.data.remote.RemoteErrorHandler
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -23,17 +25,23 @@ abstract class BasePresenter<T : IBaseView>(view: T) : IBasePresenter<T>, Corout
         attachView(view)
     }
 
-    override fun onWindowCreated() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onWindowCreated() {}
 
-    override fun onWindowStarted() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onWindowStarted() {}
 
-    override fun onWindowResumed() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onWindowResumed() {}
 
-    override fun onWindowPaused() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onWindowPaused() {}
 
-    override fun onWindowStopped() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onWindowStopped() {}
 
-    override fun onWindowDestroyed() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onWindowDestroyed() {
         destroy()
     }
 

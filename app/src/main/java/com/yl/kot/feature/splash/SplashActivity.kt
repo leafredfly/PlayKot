@@ -25,8 +25,10 @@ class SplashActivity : BaseActivity() {
         return R.layout.activity_splash
     }
 
+    override fun addLifecycleObserver() {}
+
     override fun initView() {
-        mTvSkip = findViewById(R.id.tv_skip)
+        mTvSkip = findViewById(R.id.tv_splash_skip)
         mTvSkip.setOnClickListener {
             jump2MainView()
         }

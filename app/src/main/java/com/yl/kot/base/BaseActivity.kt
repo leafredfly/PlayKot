@@ -31,6 +31,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
         setContentView(getLayoutId())
 
         initView()
+        addLifecycleObserver()
     }
 
     override fun dataLoadFail(@StringRes resId: Int) {
@@ -54,4 +55,6 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
     protected abstract fun getLayoutId(): Int
 
     protected abstract fun initView()
+
+    protected abstract fun addLifecycleObserver()
 }

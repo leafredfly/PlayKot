@@ -17,6 +17,8 @@ class DbManager private constructor() {
         }
 
         fun getSearchHistoryDao(): SearchHistoryDao = INSTANCE.mAppDb.searchHistoryDao()
+
+        fun getCollectionArticleDao(): CollectionArticleDao = INSTANCE.mAppDb.collectionArticleDao()
     }
 
     private val mAppDb: AppDatabase = Room.databaseBuilder(

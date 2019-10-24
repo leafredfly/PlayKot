@@ -2,9 +2,13 @@ package com.yl.kot.feature.home
 
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader
@@ -16,11 +20,12 @@ import com.yl.kot.data.entity.Banner
 import com.yl.kot.view.banner.BannerView
 import com.yl.kot.view.decoration.ArticleItemDecoration
 
-class HomeActivity : BaseActivity(), HomeContract.View {
+class HomeActivity : BaseActivity(), HomeContract.View, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var refreshLayout: SmartRefreshLayout
     private lateinit var bannerHome: BannerView
     private lateinit var rvArticleList: RecyclerView
+    private lateinit var drawer: DrawerLayout
 
     private val mHomePresenter: HomeContract.Presenter by lazy {
         HomePresenter(this)
@@ -42,12 +47,35 @@ class HomeActivity : BaseActivity(), HomeContract.View {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawer.closeDrawers()
+        when (item.itemId) {
+            R.id.menu_home_collection -> Page.toCollection()
+        }
+        return true
+    }
+
     override fun getLayoutId(): Int = R.layout.activity_home
+
+    override fun addLifecycleObserver() {
+        lifecycle.addObserver(mHomePresenter)
+    }
 
     override fun initView() {
         refreshLayout = findViewById(R.id.refresh_home)
         bannerHome = findViewById(R.id.banner_home)
         rvArticleList = findViewById(R.id.rv_home_article_list)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_home)
+        setSupportActionBar(toolbar)
+        drawer = findViewById(R.id.drawer_home)
+        val actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+        val navigationView = findViewById<NavigationView>(R.id.nav_home)
+        navigationView.itemIconTintList = null
+        navigationView.setNavigationItemSelectedListener(this)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = RecyclerView.VERTICAL

@@ -6,11 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yl.kot.data.entity.Banner
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.launch
 
 /**
  * Author: Want-Sleep
@@ -18,13 +13,14 @@ import kotlinx.coroutines.launch
  * Desc: Banner
  */
 
-@ObsoleteCoroutinesApi
 class BannerView : RecyclerView {
 
     private val mBannerAdapter: BannerAdapter
     private val mLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
-    private val mTickerChannel = ticker(5_000, 5_000)
-    private var mTimerJob: Job? = null
+    private val mScrollRunnable: Runnable = Runnable {
+        smoothScrollToPosition(mLayoutManager.findFirstVisibleItemPosition() + 1)
+        authScrollAfterSeconds()
+    }
 
     constructor(context: Context) : this(context, null)
 
@@ -46,20 +42,19 @@ class BannerView : RecyclerView {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         // set timer
-        mTimerJob = MainScope().launch {
-            for (it in mTickerChannel) {
-                smoothScrollToPosition(mLayoutManager.findFirstVisibleItemPosition() + 1)
-            }
-        }
+        authScrollAfterSeconds()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mTickerChannel.cancel()
-        mTimerJob?.cancel()
+        removeCallbacks(mScrollRunnable)
     }
 
     fun setBanner(bannerList: List<Banner>) {
         mBannerAdapter.refresh(bannerList)
+    }
+
+    private fun authScrollAfterSeconds() {
+        postDelayed(mScrollRunnable, 5_000)
     }
 }

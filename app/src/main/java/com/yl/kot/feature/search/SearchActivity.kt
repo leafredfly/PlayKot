@@ -80,6 +80,10 @@ class SearchActivity : BaseActivity(), SearchContract.View {
 
     override fun showDataLoadFailView(): Boolean = false
 
+    override fun addLifecycleObserver() {
+        lifecycle.addObserver(mSearchPresenter)
+    }
+
     override fun initView() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val rvWrapView = findViewById<RecyclerView>(R.id.rv_search_wrap)

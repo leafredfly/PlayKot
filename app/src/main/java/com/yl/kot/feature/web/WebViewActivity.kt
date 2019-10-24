@@ -2,13 +2,19 @@ package com.yl.kot.feature.web
 
 import android.annotation.SuppressLint
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yl.kot.Constants
+import com.yl.kot.MemoryData
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
+import com.yl.kot.data.entity.Article
+import com.yl.kot.feature.collection.CollectionContract
+import com.yl.kot.feature.collection.CollectionPresenter
 
 /**
  * Author: Want-Sleep
@@ -16,10 +22,15 @@ import com.yl.kot.base.BaseActivity
  * Desc:
  */
 
-class WebViewActivity : BaseActivity() {
+class WebViewActivity : BaseActivity(), CollectionContract.View {
 
     private lateinit var flWebContainer: FrameLayout
     private lateinit var webView: WebView
+    private lateinit var fabCollect: FloatingActionButton
+
+    private val mCollectionPresenter: CollectionContract.Presenter by lazy {
+        CollectionPresenter(this)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -30,14 +41,22 @@ class WebViewActivity : BaseActivity() {
 
     override fun getLayoutId(): Int = R.layout.activity_webview
 
+    override fun addLifecycleObserver() {
+        lifecycle.addObserver(mCollectionPresenter)
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun initView() {
         title = intent.getStringExtra(Constants.EXTRA_WEBSITE_TITLE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         flWebContainer = findViewById(R.id.fl_web_container)
+        fabCollect = findViewById(R.id.fab_article_collect)
         webView = WebView(this)
-        flWebContainer.addView(webView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+
+        flWebContainer.addView(webView, 0,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        )
 
         // WebView Setting
         val webSettings = webView.settings
@@ -53,6 +72,15 @@ class WebViewActivity : BaseActivity() {
 
         val url = intent.getStringExtra(Constants.EXTRA_URL)
         webView.loadUrl(url)
+
+        fabCollect.setOnClickListener {
+            MemoryData.getBrowsedArticle()?.let {
+                mCollectionPresenter.collectOrCancel(it)
+            }
+        }
+        MemoryData.getBrowsedArticle()?.let {
+            mCollectionPresenter.queryArticleHasCollected(it.id)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -68,5 +96,18 @@ class WebViewActivity : BaseActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onArticleHasCollected(hasCollected: Boolean) {
+        fabCollect.visibility = View.VISIBLE
+        if (hasCollected) {
+            fabCollect.setImageResource(R.drawable.ic_collection_checked)
+        } else {
+            fabCollect.setImageResource(R.drawable.ic_collection_unchecked)
+        }
+    }
+
+    override fun showArticle(articleList: List<Article>) {
+
     }
 }

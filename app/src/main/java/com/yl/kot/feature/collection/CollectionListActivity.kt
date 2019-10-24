@@ -1,4 +1,4 @@
-package com.yl.kot.feature.search
+package com.yl.kot.feature.collection
 
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
@@ -7,54 +7,35 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader
-import com.yl.kot.Constants
 import com.yl.kot.R
 import com.yl.kot.base.BaseActivity
 import com.yl.kot.data.entity.Article
-import com.yl.kot.data.entity.HotWord
-import com.yl.kot.data.entity.SearchHistory
-import com.yl.kot.feature.home.ArticleAdapter
 import com.yl.kot.view.decoration.ArticleItemDecoration
 
 /**
  * Author: Want-Sleep
- * Date: 2019/07/31
+ * Date: 2019/10/24
  * Desc:
  */
-
-class SearchDetailActivity : BaseActivity(), SearchContract.View {
+class CollectionListActivity: BaseActivity(), CollectionContract.View {
 
     private lateinit var refreshLayout: SmartRefreshLayout
     private lateinit var rvArticleList: RecyclerView
 
-    private val mSearchPresenter: SearchContract.Presenter by lazy {
-        SearchPresenter(this)
+    private val mCollectionPresenter: CollectionContract.Presenter by lazy {
+        CollectionPresenter(this)
     }
-    private val mArticleAdapter: ArticleAdapter by lazy {
-        ArticleAdapter()
+    private val mArticleAdapter: CollectionArticleAdapter by lazy {
+        CollectionArticleAdapter()
     }
-    private var mPage = 0
+    private var mPage: Int = 0
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun getLayoutId(): Int = R.layout.activity_search_detail
-
-    override fun addLifecycleObserver() {
-        lifecycle.addObserver(mSearchPresenter)
-    }
+    override fun getLayoutId(): Int = R.layout.activity_collection_list
 
     override fun initView() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val keyword: String? = intent.getStringExtra(Constants.EXTRA_SEARCH_KEY)
-        title = keyword
-
-        refreshLayout = findViewById(R.id.refresh_search_detail)
-        rvArticleList = findViewById(R.id.rv_search_detail_article_list)
+        refreshLayout = findViewById(R.id.refresh_collection_list)
+        rvArticleList = findViewById(R.id.rv_collection_article_list)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = RecyclerView.VERTICAL
@@ -71,30 +52,30 @@ class SearchDetailActivity : BaseActivity(), SearchContract.View {
         refreshLayout.setRefreshFooter(refreshFooter)
         refreshLayout.setOnRefreshListener {
             mPage = 0
-            mSearchPresenter.searchArticle(keyword, mPage)
+            mCollectionPresenter.getCollectionArticlesByPage(mPage)
         }
         refreshLayout.setOnLoadMoreListener {
             mPage++
-            mSearchPresenter.searchArticle(keyword, mPage)
+            mCollectionPresenter.getCollectionArticlesByPage(mPage)
         }
 
-        mSearchPresenter.searchArticle(keyword, mPage)
+        mCollectionPresenter.getCollectionArticlesByPage(0)
     }
 
-    override fun reloadData() {
-        mPage = 0
-        mSearchPresenter.searchArticle(intent.getStringExtra(Constants.EXTRA_SEARCH_KEY), mPage)
+    override fun addLifecycleObserver() {
+        lifecycle.addObserver(mCollectionPresenter)
     }
 
-    override fun showHotWords(hotWordList: List<HotWord>) {
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
-    override fun showSearchHistory(searchHistory: List<SearchHistory>) {
+    override fun onArticleHasCollected(hasCollected: Boolean) {}
 
-    }
-
-    override fun showSearchResult(articleList: List<Article>) {
+    override fun showArticle(articleList: List<Article>) {
         if (mPage == 0) {
             refreshLayout.finishRefresh()
             mArticleAdapter.refresh(articleList)
@@ -102,6 +83,6 @@ class SearchDetailActivity : BaseActivity(), SearchContract.View {
             refreshLayout.finishLoadMore()
             mArticleAdapter.loadMore(articleList)
         }
-        if (articleList.size < 20) refreshLayout.setNoMoreData(true)
+        if (articleList.size < 10) refreshLayout.setNoMoreData(true)
     }
 }
